@@ -29,6 +29,11 @@ func main() {
 
 	if len(syms) != 0 {
 		for _, v := range syms {
+			if regexp.MustCompile(`^[a-zA-Z]+$`).MatchString(v) == false {
+				fmt.Printf("Passing %s for invalid format.\n", v)
+				continue
+			}
+
 			wg.Add(1)
 			go func(v string, wg *sync.WaitGroup) {
 				ch := make(chan []string)
@@ -109,7 +114,17 @@ func finviz(ticker string, ch *chan []string) {
 	body, _ := ioutil.ReadAll(r.Body)
 
 	chg, er := regexp.MustCompile(`Change\<\/td\>.+\"\>(.+?)\<`), regexp.MustCompile(`Earnings\<\/td\>\<td\swidth=\".+\"\>\<b\>(.+?)\<`)
-	data = append(data, chg.FindStringSubmatch(string(body))[1], er.FindStringSubmatch(string(body))[1])
+	a, b := chg.FindStringSubmatch(string(body)), er.FindStringSubmatch(string(body))
+
+	if len(a) == 0 {
+		a = append(a, "", "N/a")
+	}
+
+	if len(b) == 0 {
+		b = append(b, "", "N/a\t")
+	}
+
+	data = append(data, a[1], b[1])
 
 	*ch <- data
 }
