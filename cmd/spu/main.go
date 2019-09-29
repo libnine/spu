@@ -10,6 +10,7 @@ import (
 	"../../src/cal"
 	"../../src/fin"
 	"../../src/pretty"
+	"../../src/rh"
 	"../../src/tr"
 	"../../src/vol"
 )
@@ -30,6 +31,10 @@ func main() {
 			fmt.Printf("\nUsage:\tspu [OPTIONS] COMMAND\n\nA tool for getting securities data.\n\nOptions:")
 			fmt.Printf("\n\t-c\tDaily economic calendar.")
 			fmt.Printf("\n\t-g\tCNN Fear & Greed indices.")
+			fmt.Printf("\n\t-rh\tRobinhood trends. Use the following commands:")
+			fmt.Printf("\n\t\t\tdec\tTop decreases in ownership.")
+			fmt.Printf("\n\t\t\tinc\tTop increases in ownership.")
+			fmt.Printf("\n\t\t\tmost\tMost popular robinhood stocks by ownership.")
 			fmt.Printf("\n\t-t\tStockTwits & Yahoo trending tickers.")
 			fmt.Println("\n")
 
@@ -43,25 +48,33 @@ func main() {
 			fmt.Printf("\nNow:\t\t%s\nPrevious Day:\t%s\nPrevious Week:\t%s\nPrevious Month:\t%s\nPrevious Year:\t%s\n\n",
 				_greed[0], _greed[1], _greed[2], _greed[3], _greed[4])
 
-		case arg == "-rh":
-			fallthrough
-
 		case arg == "-t":
+			fmt.Println(trend)
 			fallthrough
 
 		default:
-			fmt.Println("this does nothing")
+			return
 		}
 
 	case v > 1:
+		if args[0] == "-rh" {
+			if args[1] == "most" {
+				rh.RHpop()
+				return
+			}
+			// } else if args[2] == "dec" {
+			// 	RHdec()
+			// 	return
+			// } else if args[2] == "inc" {
+			// 	RHinc()
+			// 	return
+			// }
+		}
+
 		for _, v := range args {
 			if len(v) > 5 {
 				fmt.Printf("%s: invalid ticker format.\n", v)
 				continue
-			}
-
-			if v == "-t" {
-				trend = append(trend, "yo")
 			}
 
 			syms = append(syms, v)

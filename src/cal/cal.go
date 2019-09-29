@@ -22,6 +22,12 @@ func Calendar() {
 	e, t := events.FindAllStringSubmatch(string(body), -1), times.FindAllStringSubmatch(string(body), -1)
 
 	for i := range e {
+		// if strings.Split(t[i-1][0], ":")[0] > strings.Split(t[i][0], ":")[0] && strings.Split(t[i][0], " ")[1] == "AM" ||
+
+		// {
+
+		// }
+
 		str := fmt.Sprintf("%s %s", t[i][0], e[i][1])
 		fmt.Println(str)
 	}
