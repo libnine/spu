@@ -1,7 +1,6 @@
 package cal
 
 import (
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -30,14 +29,13 @@ func Calendar() {
 
 		if strings.Split(t[i+1][0], ":")[0] < strings.Split(t[i][0], ":")[0] &&
 			!(strings.Split(t[i+1][0], " ")[1] == "PM") ||
-			strings.Split(t[i+1][0], " ")[1] == "PM" && strings.Split(t[i][0], " ")[1] == "AM" 
-			{
+			strings.Split(t[i+1][0], " ")[1] == "PM" && strings.Split(t[i][0], " ")[1] == "AM" {
 			weekday = append(weekday, t[i-n : i][0])
 			d++
 			n = 0
 		}
 	}
 
-	str := fmt.Sprintf("%s %s", t[i][0], e[i][1])
-	fmt.Println(str)
+	// str := fmt.Sprintf("%s %s", t[i][0], e[i][1])
+	// fmt.Println(str)
 }
