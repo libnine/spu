@@ -35,6 +35,7 @@ func main() {
 			fmt.Printf("\n\t\t\tdec\tTop decreases in ownership.")
 			fmt.Printf("\n\t\t\tinc\tTop increases in ownership.")
 			fmt.Printf("\n\t\t\tmost\tMost popular robinhood stocks by ownership.")
+			fmt.Printf("\n\t\t\tpop\tLargest robinhood popularity changes.")
 			fmt.Printf("\n\t-t\tStockTwits & Yahoo trending tickers.")
 			fmt.Println("\n")
 
@@ -61,14 +62,14 @@ func main() {
 			if args[1] == "most" {
 				rh.RHpop()
 				return
+			} else if args[1] == "pop" {
+				rh.RHchg()
+				return
+				// } else if args[1] == "inc" {
+				// 	RHinc()
+				// 	return
+				// }
 			}
-			// } else if args[2] == "dec" {
-			// 	RHdec()
-			// 	return
-			// } else if args[2] == "inc" {
-			// 	RHinc()
-			// 	return
-			// }
 		}
 
 		for _, v := range args {
@@ -104,6 +105,8 @@ func main() {
 					wg.Done()
 				}(v, &wg)
 			}
+		} else {
+			fmt.Println("No command specified.")
 		}
 
 		wg.Wait()

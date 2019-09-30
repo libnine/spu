@@ -17,7 +17,7 @@ type incdec struct {
 	Start  int    `json:"start_popularity",omitempty`
 	End    int    `json:"end_popularity",omitempty`
 	Diff   int    `json:"popularity_difference",omitempty`
-	Symbol string `json:"string",omitempty`
+	Symbol string `json:"symbol",omitempty`
 }
 
 func RHpop() {
@@ -54,10 +54,35 @@ func RHpop() {
 	}
 }
 
-// func RHincdec(id string, tf string) {
-// 	switch id {
-// 	case "inc":
-// 		url := fmt.Sprintf("https://robintrack.net/api/largest_popularity_changes?hours_ago=24&limit=50&percentage=false&min_popularity=50&start_index=0", %s)
+func RHchg() {
+	var id []incdec
+	var sym, sym25 string
 
-// 	}
-// }
+	r, err := http.Get("https://robintrack.net/api/largest_popularity_changes?hours_ago=24&limit=50&percentage=false&min_popularity=50&start_index=0")
+	if err != nil {
+		log.Fatal("Robinhood largest popularity changes unavailable.")
+	}
+
+	body, _ := ioutil.ReadAll(r.Body)
+
+	defer r.Body.Close()
+	err = json.Unmarshal(body, &id)
+
+	fmt.Printf("\n")
+	for i := 0; i < 25; i++ {
+		if len(id[i].Symbol) == 5 {
+			sym = fmt.Sprintf("%s", id[i].Symbol)
+		} else {
+			sym = fmt.Sprintf("%s\t", id[i].Symbol)
+		}
+
+		if len(id[i+25].Symbol) == 5 {
+			sym25 = fmt.Sprintf("%s", id[i+25].Symbol)
+		} else {
+			sym25 = fmt.Sprintf("%s\t", id[i+25].Symbol)
+		}
+
+		fmt.Printf("%v %s\t%v\t\t\t%v %s\t\t%v\n", i+1, sym,
+			id[i].Diff, i+26, sym25, id[i+25].Diff)
+	}
+}
