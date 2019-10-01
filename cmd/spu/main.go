@@ -59,16 +59,22 @@ func main() {
 
 	case v > 1:
 		if args[0] == "-rh" {
-			if args[1] == "most" {
+			switch args[1] {
+			case "most":
 				rh.RHpop()
 				return
-			} else if args[1] == "pop" {
+			case "pop":
 				rh.RHchg()
 				return
-				// } else if args[1] == "inc" {
-				// 	RHinc()
-				// 	return
-				// }
+			case "inc":
+				rh.RHinc()
+				return
+			case "dec":
+				rh.RHdec()
+				return
+			default:
+				fmt.Printf("No command for '%s' under -rh.\n", args[1])
+				return
 			}
 		}
 
