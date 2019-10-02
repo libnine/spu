@@ -1,30 +1,32 @@
 package tr
 
 import (
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"regexp"
 )
 
+type symbol struct {
+	Symbol string `json:"symbol"`
+	Rank   int    `json:"sortOrder"`
+}
+
 func Trending(ch *chan []string) {
-	return
+	data := []string{}
+	y := yahoo()
+
+	for i := range y {
+		data = append(data, y[i].Symbol)
+	}
+
+	*ch <- data
 }
 
 func Greed(ch *chan []string) {
 	data := cnn()
 	*ch <- data
 }
-
-// func st() []string {
-// 	data := []string{}
-// 	r, err := http.Get("https://api.stocktwits.com/api/2/streams/trending.json")
-// 	if err != nil {
-// 		data = append(data, "N/a")
-// 		return data
-// 	}
-
-// 	return data
-// }
 
 func cnn() []string {
 	data := []string{}
@@ -45,4 +47,33 @@ func cnn() []string {
 		greedPrevYr.FindStringSubmatch(string(body))[1])
 
 	return data
+}
+
+// func st() []string {
+// 	data := []string{}
+// 	r, err := http.Get("https://api.stocktwits.com/api/2/streams/trending.json")
+// 	if err != nil {
+// 		data = append(data, "N/a")
+// 		return data
+// 	}
+
+// 	return data
+// }
+
+func yahoo() []symbol {
+	tickers := []symbol{}
+
+	r, err := http.Get("https://finance.yahoo.com/trending-tickers/")
+	if err != nil {
+		tickers = append(tickers, symbol{"N/a", 0})
+		// return tickers
+	}
+
+	defer r.Body.Close()
+	body, _ := ioutil.ReadAll(r.Body)
+
+	yahoo := regexp.MustCompile(`{"trending_tickers":{"positions":(.+?),"name"`)
+	_ = json.Unmarshal([]byte(yahoo.FindStringSubmatch(string(body))[1]), &tickers)
+
+	return tickers
 }
