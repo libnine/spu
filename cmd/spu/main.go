@@ -73,8 +73,7 @@ func main() {
 				rh.RHdec()
 				return
 			default:
-				fmt.Printf("No command for '%s' under -rh.\n", args[1])
-				return
+				panic(fmt.Sprintf("No command for '%s' under -rh.\n", args[1]))
 			}
 		}
 

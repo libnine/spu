@@ -41,7 +41,7 @@ func cnn() []string {
 	greedPrevWk, greedPrevMo, greedPrevYr := regexp.MustCompile(`Greed\s1\sWeek\sAgo\:\s(.+?)\<\/li`), regexp.MustCompile(`Greed\s1\sMonth\sAgo\:\s(.+?)\<\/li`), regexp.MustCompile(`Greed\s1\sYear\sAgo\:\s(.+?)\<\/li`)
 
 	data = append(data, greedNow.FindStringSubmatch(string(body))[1], greedPrevClose.FindStringSubmatch(string(body))[1],
-		greedPrevMo.FindStringSubmatch(string(body))[1], greedPrevWk.FindStringSubmatch(string(body))[1],
+		greedPrevWk.FindStringSubmatch(string(body))[1], greedPrevMo.FindStringSubmatch(string(body))[1],
 		greedPrevYr.FindStringSubmatch(string(body))[1])
 
 	return data
