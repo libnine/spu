@@ -14,6 +14,15 @@ type symbol struct {
 	Rank   int    `json:"sortOrder"`
 }
 
+type stsymbols struct {
+	Aliases        []string `json:"aliases,omitempty"`
+	ID             int      `json:"id,omitempty"`
+	IsFollowing    bool     `json:"is_following,omitempty"`
+	Symbol         string   `json:"symbol"`
+	Title          string   `json:"title,omitempty"`
+	WatchlistCount int      `json:"watchlist_count"`
+}
+
 func Trending() {
 	// var yahooBool, stBool = make(chan bool), make(chan bool)
 	var yahooBool = make(chan bool)
@@ -63,9 +72,11 @@ func cnn() []string {
 	return data
 }
 
-// func st() []string {
 func St() {
 	var msgs []map[string]interface{}
+	var ticker []stsymbols
+	var tickers []string
+
 	data := []string{}
 	stmap := make(map[string]interface{})
 
@@ -82,8 +93,10 @@ func St() {
 	_ = json.Unmarshal(m, &msgs)
 
 	for _, v := range msgs {
-		fmt.Println(v["symbols"])
-		break
+		j, _ := json.Marshal(v["symbols"])
+		_ = json.Unmarshal(j, &ticker)
+		fmt.Println(ticker[0].Symbol)
+		tickers = append(tickers, ticker[0].Symbol)
 	}
 }
 
