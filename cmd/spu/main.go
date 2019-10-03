@@ -50,32 +50,8 @@ func main() {
 				_greed[0], _greed[1], _greed[2], _greed[3], _greed[4])
 
 		case arg == "-t":
-			var sym, sym2, sym3 string
-			chT := make(chan []string)
-			go tr.Trending(&chT)
-			_yahoo := <-chT
-
-			for i := 0; i < len(_yahoo)/3; i++ {
-				if len(_yahoo[i]) > 4 && !(strings.Contains(_yahoo[i], "^")) {
-					sym = fmt.Sprintf("%s", _yahoo[i])
-				} else {
-					sym = fmt.Sprintf("%s\t", _yahoo[i])
-				}
-
-				if len(_yahoo[i+10]) > 4 && !(strings.Contains(_yahoo[i+10], "^")) {
-					sym2 = fmt.Sprintf("%s", _yahoo[i+10])
-				} else {
-					sym2 = fmt.Sprintf("%s\t", _yahoo[i+10])
-				}
-
-				if len(_yahoo[i+20]) > 4 && !(strings.Contains(_yahoo[i+20], "^")) {
-					sym3 = fmt.Sprintf("%s", _yahoo[i+20])
-				} else {
-					sym3 = fmt.Sprintf("%s\t", _yahoo[i+20])
-				}
-
-				fmt.Printf("%v %s\t%v %s\t%v %s\n", i+1, sym, i+1+10, sym2, i+1+20, sym3)
-			}
+			// tr.Trending()
+			tr.St()
 
 		default:
 			return
