@@ -24,9 +24,9 @@ type stsymbols struct {
 }
 
 func Trending() {
-	// var yahooBool, stBool = make(chan bool), make(chan bool)
 	var yahooBool = make(chan bool)
-	data := []string{}
+	var stBool = make(chan bool)
+	data, stdata := []string{}, []string{}
 
 	go func() {
 		y := yahoo()
@@ -38,12 +38,23 @@ func Trending() {
 		yahooBool <- true
 	}()
 
+	go func() {
+		s := st()
+
+		for n := range s {
+			stdata = append(stdata, s[n])
+		}
+
+		stBool <- true
+	}()
+
+	<-stBool
 	<-yahooBool
 
-	fmt.Printf("\n")
-	yahoo_print(data)
-
-	// <- stBool
+	fmt.Printf("\nYahoo\n")
+	yahooPrint(data)
+	fmt.Printf("\nStocktwits\n")
+	stPrint(stdata)
 }
 
 func Greed(ch *chan []string) {
@@ -72,12 +83,13 @@ func cnn() []string {
 	return data
 }
 
-func St() {
+func st() []string {
 	var msgs []map[string]interface{}
 	var ticker []stsymbols
-	var tickers []string
+	var tickers, final []string
 
 	data := []string{}
+	exists := make(map[string]bool)
 	stmap := make(map[string]interface{})
 
 	r, err := http.Get("https://api.stocktwits.com/api/2/streams/trending.json")
@@ -95,9 +107,20 @@ func St() {
 	for _, v := range msgs {
 		j, _ := json.Marshal(v["symbols"])
 		_ = json.Unmarshal(j, &ticker)
-		fmt.Println(ticker[0].Symbol)
 		tickers = append(tickers, ticker[0].Symbol)
 	}
+
+	for v := range tickers {
+		if exists[tickers[v]] == true {
+			continue
+		} else {
+			exists[tickers[v]] = true
+			final = append(final, tickers[v])
+		}
+	}
+
+	return final
+
 }
 
 func yahoo() []symbol {
@@ -118,7 +141,17 @@ func yahoo() []symbol {
 	return tickers
 }
 
-func yahoo_print(_yahoo []string) {
+func stPrint(_st []string) {
+	for i := 0; i < len(_st); i++ {
+		if i+10 < len(_st) {
+			fmt.Printf("\n%s\t%s", _st[i], _st[i+10])
+		} else {
+			fmt.Printf("\n%s", _st[i])
+		}
+	}
+}
+
+func yahooPrint(_yahoo []string) {
 	var sym, sym2, sym3 string
 
 	for i := 0; i < len(_yahoo)/3; i++ {

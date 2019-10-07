@@ -50,8 +50,7 @@ func main() {
 				_greed[0], _greed[1], _greed[2], _greed[3], _greed[4])
 
 		case arg == "-t":
-			// tr.Trending()
-			tr.St()
+			tr.Trending()
 
 		default:
 			return
