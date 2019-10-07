@@ -55,6 +55,7 @@ func Trending() {
 	yahooPrint(data)
 	fmt.Printf("\nStocktwits\n")
 	stPrint(stdata)
+	fmt.Printf("\n")
 }
 
 func Greed(ch *chan []string) {

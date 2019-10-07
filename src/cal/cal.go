@@ -25,7 +25,7 @@ func Calendar() {
 	defer r.Body.Close()
 	body, _ := ioutil.ReadAll(r.Body)
 
-	events, times := regexp.MustCompile(`econoevents[\s]{0,1}[a-zA-Z]{0,5}[a-zA-Z+]{0,1}\"\>\<[a-zA-Z\s\=\"\.\?\d\&\/]+\#top\"\>(.+?)\<`), regexp.MustCompile(`\d+\:\d+\s[AP][M]`)
+	events, times := regexp.MustCompile(`[econo(events|alerts)][\s]{0,1}[a-zA-Z]{0,5}[a-zA-Z+]{0,1}\"\>\<[a-zA-Z\s\=\"\.\?\d\&\/]+\#top\"\>(.+?)\<`), regexp.MustCompile(`\d+\:\d+\s[AP][M]`)
 	e, t := events.FindAllStringSubmatch(string(body), -1), times.FindAllStringSubmatch(string(body), -1)
 
 	for i := range e {
@@ -37,7 +37,7 @@ func Calendar() {
 
 		temp = append(temp, fmt.Sprintf("%s %s", t[i-offset][0], e[i][1]))
 
-		if len(weekset) == 4 && i == len(e)-1 {
+		if i == len(e)-1 {
 			weekset = append(weekset, temp)
 			break
 		}
@@ -52,8 +52,11 @@ func Calendar() {
 			log.Fatal("Error populating calendar data.")
 		}
 
-		if x > y && strings.Split(t[i-offset+1][0], " ")[1] == "AM" ||
-			strings.Split(t[i-offset+1][0], " ")[1] == "PM" && strings.Split(t[i-offset+1][0], " ")[1] == "AM" {
+		if x > y && strings.Split(t[i-offset+1][0], " ")[1] == "AM" {
+			weekset = append(weekset, temp)
+			temp = nil
+		} else if strings.Split(t[i-offset][0], " ")[1] == "PM" && (strings.Split(t[i-offset+1][0], " ")[1] == "AM" ||
+			(strings.Contains(e[i+1][1], "Settlement") || strings.Contains(e[i+1][1], "Motor Vehicle"))) {
 			weekset = append(weekset, temp)
 			temp = nil
 		}
