@@ -62,7 +62,7 @@ func Calendar() {
 		}
 	}
 
-	dn := int(time.Now().Weekday())+1
+	dn := int(time.Now().Weekday()) + 1
 	yr, mo, day := time.Now().Date()
 
 	if dn == 6 || dn == 7 {

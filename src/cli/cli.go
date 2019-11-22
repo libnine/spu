@@ -38,7 +38,7 @@ func Run(args []string) {
 			fmt.Printf("\n\t-t\tStockTwits & Yahoo trending tickers.")
 			fmt.Printf("\n\nCommands:")
 			fmt.Printf("\n\tnews\tPrint recent headlines from news sources.")
-			fmt.Printf("\n\t\t-bbg\tBloomberg\n\t\t-rtrs\tReuters\n\t\t-wsj\tWall Street Journal")
+			fmt.Printf("\n\t\t-bbg\tBloomberg\n\t\t-mw\tMarketWatch\n\t\t-rtrs\tReuters\n\t\t-wsj\tWall Street Journal")
 			fmt.Println("\n")
 
 		case arg == "-c":
@@ -63,6 +63,9 @@ func Run(args []string) {
 			switch args[1] {
 			case "-bbg":
 				etc.News("bbg")
+				return
+			case "-mw":
+				etc.News("mw")
 				return
 			case "-rtrs":
 				etc.News("rtrs")

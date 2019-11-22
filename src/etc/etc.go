@@ -1,14 +1,67 @@
 package etc
 
 import (
+	"encoding/xml"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"regexp"
+	"time"
 )
 
+type Data struct {
+	Pub     Publication `xml:"publication"`
+	PubDate *time.Time  `xml:"publication_date"`
+	Title   string      `xml:"title"`
+	Kws     string      `xml:"keywords"`
+}
+
+type Image struct {
+	Loc string `xml:"loc"`
+	Cap string `xml:"caption"`
+}
+
+type Publication struct {
+	Name string `xml:"name"`
+	Lang string `xml:"language"`
+}
+
+type Urls struct {
+	XMLName xml.Name `xml:"urlset"`
+	URLs    []Url    `xml:"url"`
+}
+
+type Url struct {
+	Loc     string `xml:"loc"`
+	Link    string `xml:"link"`
+	Details Data   `xml:"news"`
+	Img     Image  `xml:"image"`
+}
+
 func News(newsrc string) {
+	if newsrc == "mw" {
+		mw := Urls{}
+
+		r, err := http.Get("https://www.marketwatch.com/mw_news_sitemap.xml")
+		if err != nil {
+			log.Fatal("Couldn't get MarketWatch data.")
+		}
+
+		defer r.Body.Close()
+		body, _ := ioutil.ReadAll(r.Body)
+
+		err = xml.Unmarshal(body, &mw)
+
+		for n := range mw.URLs {
+			fmt.Println(n)
+			if mw.URLs[n].Details.PubDate.Day() != time.Now().Day() {
+				break
+			}
+
+		}
+	}
+
 	r, err := http.Get("https://finviz.com/news.ashx?v=2")
 	if err != nil {
 		log.Fatal("Couldn't get Bloomberg headlines.")
