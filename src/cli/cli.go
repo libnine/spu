@@ -11,6 +11,7 @@ import (
 	"../etc"
 	"../fin"
 	"../pretty"
+	"../quandl"
 	"../rh"
 	"../tr"
 	"../vol"
@@ -28,6 +29,7 @@ func Run(args []string) {
 
 		case arg == "help", arg == "-h":
 			fmt.Printf("\nUsage:\tspu [OPTIONS] COMMAND [ARG...]\n\nA tool for retrieving securities data.\n\nOptions:")
+			fmt.Printf("\n\t-a\tAAII Investor Sentiment.")
 			fmt.Printf("\n\t-c\tDaily economic calendar.")
 			fmt.Printf("\n\t-g\tCNN Fear & Greed indices.")
 			fmt.Printf("\n\t-rh\tRobinhood trends. Use the following commands:")
@@ -40,6 +42,9 @@ func Run(args []string) {
 			fmt.Printf("\n\tnews\tPrint recent headlines from news sources.")
 			fmt.Printf("\n\t\t-bbg\tBloomberg\n\t\t-mw\tMarketWatch\n\t\t-rtrs\tReuters\n\t\t-wsj\tWall Street Journal")
 			fmt.Println("\n")
+
+		case arg == "-a":
+			quandl.Q()
 
 		case arg == "-c":
 			cal.Calendar()

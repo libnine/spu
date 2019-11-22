@@ -54,11 +54,10 @@ func News(newsrc string) {
 		err = xml.Unmarshal(body, &mw)
 
 		for n := range mw.URLs {
-			fmt.Println(n)
-			if mw.URLs[n].Details.PubDate.Day() != time.Now().Day() {
-				break
+			fmt.Printf("%v %s\n", mw.URLs[n].Details.PubDate.Local().Format(time.RFC1123), mw.URLs[n].Details.Title)
+			if mw.URLs[n].Details.PubDate.Local().Day() != time.Now().Day() || n == 10 {
+				return
 			}
-
 		}
 	}
 
@@ -79,7 +78,6 @@ func News(newsrc string) {
 			fmt.Printf("%s\n%s\n\n", bbgParse[n][2], bbgParse[n][1])
 		}
 
-		return
 	} else if newsrc == "rtrs" {
 		rtrs := regexp.MustCompile(`(http:\/\/feeds\.reuters\.com\/~r\/reuters\/businessNews\/.+)\"\starget\=\"\_blank\".+tab-link\"\>(.+?)<\/a>`)
 		rtrsParse := rtrs.FindAllStringSubmatch(string(body), -1)
@@ -89,7 +87,6 @@ func News(newsrc string) {
 			fmt.Printf("%s\n%s\n\n", rtrsParse[n][2], rtrsParse[n][1])
 		}
 
-		return
 	} else if newsrc == "wsj" {
 		wsj := regexp.MustCompile(`(https\:\/\/www.wsj.com\/articles\/.+)\"\starget\=\"\_blank\".+link\">(.+?)\<\/a>`)
 		wsjParse := wsj.FindAllStringSubmatch(string(body), -1)
@@ -99,4 +96,6 @@ func News(newsrc string) {
 			fmt.Printf("%s\n%s\n\n", wsjParse[n][2], wsjParse[n][1])
 		}
 	}
+
+	return
 }
