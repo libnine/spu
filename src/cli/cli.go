@@ -32,6 +32,7 @@ func Run(args []string) {
 			fmt.Printf("\n\t-a\tAAII Investor Sentiment.")
 			fmt.Printf("\n\t-c\tDaily economic calendar.")
 			fmt.Printf("\n\t-g\tCNN Fear & Greed indices.")
+			fmt.Printf("\n\t-l\tUpcoming IPO lockup expirations.")
 			fmt.Printf("\n\t-rh\tRobinhood trends. Use the following commands:")
 			fmt.Printf("\n\t\t\tdec\tTop decreases in ownership.")
 			fmt.Printf("\n\t\t\tinc\tTop increases in ownership.")
@@ -55,6 +56,9 @@ func Run(args []string) {
 			_greed := <-chG
 			fmt.Printf("\nNow:\t\t%s\nPrevious Day:\t%s\nPrevious Week:\t%s\nPrevious Month:\t%s\nPrevious Year:\t%s\n\n",
 				_greed[0], _greed[1], _greed[2], _greed[3], _greed[4])
+
+		case arg == "-l":
+			fin.LUexp()
 
 		case arg == "-t":
 			tr.Trending()
