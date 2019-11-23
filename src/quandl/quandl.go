@@ -40,7 +40,10 @@ type DS struct {
 func Q() {
 	q := Aaii{}
 
-	r, err := http.Get("https://www.quandl.com/api/v3/datasets/AAII/AAII_SENTIMENT.json?start_date=2019-11-21&end_date=2019-11-21&api_key=L-GpxP_AZvDf_67jqgMh")
+	url := fmt.Sprintf("https://www.quandl.com/api/v3/datasets/AAII/AAII_SENTIMENT.json?start_date=%s&end_date=%s&api_key=L-GpxP_AZvDf_67jqgMh",
+		time.Now().Local().Add(time.Hour*-48).Format("2006-01-02"), time.Now().Local().Add(time.Hour*-24).Format("2006-01-02"))
+
+	r, err := http.Get(url)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -51,6 +54,6 @@ func Q() {
 
 	fmt.Printf("\n%s\t%s\n", q.Dataset.Data[0][0], q.Dataset.Name)
 	fmt.Printf("\nBullish\tNeutral\tBearish\tBull-Bear Spread\t")
-	fmt.Printf("\n%.2f\t%.2f\t%.2f\t%.2f\n", q.Dataset.Data[0][1].(float64)*100, q.Dataset.Data[0][2].(float64)*100,
+	fmt.Printf("\n%.2f\t%.2f\t%.2f\t%.2f\n\n", q.Dataset.Data[0][1].(float64)*100, q.Dataset.Data[0][2].(float64)*100,
 		q.Dataset.Data[0][3].(float64)*100, q.Dataset.Data[0][6].(float64)*100)
 }
