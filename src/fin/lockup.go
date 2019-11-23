@@ -27,13 +27,16 @@ func LUexp() {
 
 	var name_fmt string
 	i := 0
-	fmt.Println("Name\t\t\t\tLast\tExpiration\tShares\t\tIPO\tOffer Size\tDate Priced")
+	fmt.Println("Ticker\tName\t\t\t\tLast\tExpiration\tShares\t\tIPO\tOffer Size\tDate Priced")
 	for n := range tr {
 		td_re := regexp.MustCompile(`\<td\>(.+?)\<\/td\>`)
 		td := td_re.FindAllStringSubmatch(tr[n][1], -1)
 
 		re_name := regexp.MustCompile(`(.+?)\s\(\<a\shref[\s\S]+\)`)
 		name := re_name.FindStringSubmatch(td[0][1])
+
+		re_sym := regexp.MustCompile(`\(\<a\shref\=\'\/[\s\S]+\>(.+?)\<`)
+		sym := re_sym.FindStringSubmatch(td[0][1])
 
 		t, _ := time.Parse("1/02/2006", strings.TrimSpace(td[2][1]))
 
@@ -54,7 +57,7 @@ func LUexp() {
 			name_fmt = fmt.Sprintf("%s", x[:30])
 		}
 
-		fmt.Printf("%s%s\t%s\t%s\t%s\t%s\t%s\n", name_fmt, td[1][1], td[2][1], td[3][1], td[4][1], td[5][1], td[6][1])
+		fmt.Printf("%s\t%s%s\t%s\t%s\t%s\t%s\t%s\n", sym[1], name_fmt, td[1][1], td[2][1], td[3][1], td[4][1], td[5][1], td[6][1])
 		if i == 25 {
 			break
 		}
