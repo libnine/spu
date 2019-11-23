@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"regexp"
 	"strings"
-	"time"
 )
 
 func LUexp() {
@@ -37,7 +36,7 @@ func LUexp() {
 
 		// t, _ := time.Parse("2006-01-02", td[2][1])
 		// now := time.Now()
-		
+
 		// if (t <= now) {
 		// 	continue
 		// }
