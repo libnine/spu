@@ -66,7 +66,7 @@ func Calendar() {
 	yr, mo, day := time.Now().Date()
 
 	if dn == 6 || dn == 7 {
-		dn = 0
+		dn = 1
 	}
 
 	fmt.Printf("\n%s %s %v, %v\n", time.Now().Weekday(), mo, day, yr)
@@ -74,5 +74,5 @@ func Calendar() {
 		fmt.Printf("\n%s", weekset[dn-1][n])
 	}
 
-	fmt.Printf("\n")
+	fmt.Printf("\n\n")
 }

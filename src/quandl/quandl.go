@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-type Aaii struct {
+type Quandl struct {
 	Dataset DS `json:"dataset"`
 }
 
@@ -37,8 +37,8 @@ type DS struct {
 	DbID        string          `json:"database_id"`
 }
 
-func Q() {
-	q := Aaii{}
+func Qaaii() {
+	q := Quandl{}
 
 	url := fmt.Sprintf("https://www.quandl.com/api/v3/datasets/AAII/AAII_SENTIMENT.json?start_date=%s&end_date=%s&api_key=L-GpxP_AZvDf_67jqgMh",
 		time.Now().Local().Add(time.Hour*-48).Format("2006-01-02"), time.Now().Local().Add(time.Hour*-24).Format("2006-01-02"))
@@ -56,4 +56,28 @@ func Q() {
 	fmt.Printf("\nBullish\tNeutral\tBearish\tBull-Bear Spread\t")
 	fmt.Printf("\n%.2f\t%.2f\t%.2f\t%.2f\n\n", q.Dataset.Data[0][1].(float64)*100, q.Dataset.Data[0][2].(float64)*100,
 		q.Dataset.Data[0][3].(float64)*100, q.Dataset.Data[0][6].(float64)*100)
+}
+
+func Qyc() {
+	q := Quandl{}
+
+	url := fmt.Sprintf("https://www.quandl.com/api/v3/datasets/USTREASURY/YIELD.json?start_date=%s&end_date=%s&api_key=L-GpxP_AZvDf_67jqgMh",
+		time.Now().Local().Add(time.Hour*-48).Format("2006-01-02"), time.Now().Local().Add(time.Hour*-24).Format("2006-01-02"))
+
+	r, err := http.Get(url)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer r.Body.Close()
+	body, _ := ioutil.ReadAll(r.Body)
+	_ = json.Unmarshal(body, &q)
+
+	fmt.Printf("\n%s\tYield Curve\n", q.Dataset.Data[0][0])
+	fmt.Printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", q.Dataset.Cols[1], q.Dataset.Cols[2], q.Dataset.Cols[3], q.Dataset.Cols[4],
+		q.Dataset.Cols[5], q.Dataset.Cols[6], q.Dataset.Cols[7], q.Dataset.Cols[8],
+		q.Dataset.Cols[9], q.Dataset.Cols[10], q.Dataset.Cols[11], q.Dataset.Cols[12])
+	fmt.Printf("%v\t%v\t%v\t%v\t%v\t%v\t%v\t%v\t%v\t%v\t%v\t%v\n\n", q.Dataset.Data[0][1], q.Dataset.Data[0][2], q.Dataset.Data[0][3], q.Dataset.Data[0][4],
+		q.Dataset.Data[0][5], q.Dataset.Data[0][6], q.Dataset.Data[0][7], q.Dataset.Data[0][8],
+		q.Dataset.Data[0][9], q.Dataset.Data[0][10], q.Dataset.Data[0][11], q.Dataset.Data[0][12])
 }

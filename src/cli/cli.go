@@ -29,23 +29,24 @@ func Run(args []string) {
 
 		case arg == "help", arg == "-h":
 			fmt.Printf("\nUsage:\tspu [OPTIONS] COMMAND [ARG...]\n\nA tool for retrieving securities data.\n\nOptions:")
-			fmt.Printf("\n\t-a\tAAII Investor Sentiment.")
-			fmt.Printf("\n\t-c\tDaily economic calendar.")
-			fmt.Printf("\n\t-g\tCNN Fear & Greed indices.")
-			fmt.Printf("\n\t-l\tUpcoming IPO lockup expirations.")
+			fmt.Printf("\n\t-a\tAAII Investor Sentiment")
+			fmt.Printf("\n\t-c\tDaily economic calendar")
+			fmt.Printf("\n\t-g\tCNN Fear & Greed indices")
+			fmt.Printf("\n\t-l\tUpcoming IPO lockup expirations")
 			fmt.Printf("\n\t-rh\tRobinhood trends. Use the following commands:")
-			fmt.Printf("\n\t\t\tdec\tTop decreases in ownership.")
-			fmt.Printf("\n\t\t\tinc\tTop increases in ownership.")
-			fmt.Printf("\n\t\t\tmost\tMost popular robinhood stocks by ownership.")
-			fmt.Printf("\n\t\t\tpop\tLargest robinhood popularity changes.")
-			fmt.Printf("\n\t-t\tStockTwits & Yahoo trending tickers.")
+			fmt.Printf("\n\t\t\tdec\tTop decreases in ownership")
+			fmt.Printf("\n\t\t\tinc\tTop increases in ownership")
+			fmt.Printf("\n\t\t\tmost\tMost popular robinhood stocks by ownership")
+			fmt.Printf("\n\t\t\tpop\tLargest robinhood popularity changes")
+			fmt.Printf("\n\t-t\tStockTwits & Yahoo trending tickers")
+			fmt.Printf("\n\t-y\tYield curve")
 			fmt.Printf("\n\nCommands:")
 			fmt.Printf("\n\tnews\tPrint recent headlines from news sources.")
 			fmt.Printf("\n\t\t-bbg\tBloomberg\n\t\t-mw\tMarketWatch\n\t\t-rtrs\tReuters\n\t\t-wsj\tWall Street Journal")
 			fmt.Println("\n")
 
 		case arg == "-a":
-			quandl.Q()
+			quandl.Qaaii()
 
 		case arg == "-c":
 			cal.Calendar()
@@ -62,6 +63,9 @@ func Run(args []string) {
 
 		case arg == "-t":
 			tr.Trending()
+
+		case arg == "-y":
+			quandl.Qyc()
 
 		default:
 			return
