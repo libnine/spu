@@ -33,16 +33,18 @@ func Run(args []string) {
 			fmt.Printf("\n\t-c\tDaily economic calendar")
 			fmt.Printf("\n\t-g\tCNN Fear & Greed indices")
 			fmt.Printf("\n\t-l\tUpcoming IPO lockup expirations")
-			fmt.Printf("\n\t-rh\tRobinhood trends. Use the following commands:")
-			fmt.Printf("\n\t\t\tdec\tTop decreases in ownership")
-			fmt.Printf("\n\t\t\tinc\tTop increases in ownership")
-			fmt.Printf("\n\t\t\tmost\tMost popular robinhood stocks by ownership")
-			fmt.Printf("\n\t\t\tpop\tLargest robinhood popularity changes")
 			fmt.Printf("\n\t-t\tStockTwits & Yahoo trending tickers")
 			fmt.Printf("\n\t-y\tYield curve")
 			fmt.Printf("\n\nCommands:")
-			fmt.Printf("\n\tnews\tPrint recent headlines from news sources.")
-			fmt.Printf("\n\t\t-bbg\tBloomberg\n\t\t-mw\tMarketWatch\n\t\t-rtrs\tReuters\n\t\t-wsj\tWall Street Journal")
+			fmt.Printf("\n\tnews\tRecent headlines from news sources")
+			fmt.Printf("\n\t\t-bbg\tBloomberg\n\t\t-mw\tMarketWatch\n\t\t-rtrs\tReuters\n\t\t-wsj\tWall Street Journal\n")
+			fmt.Printf("\n\trh\tRobinhood data")
+			fmt.Printf("\n\t\t-dec\tTop decreases in ownership")
+			fmt.Printf("\n\t\t-inc\tTop increases in ownership")
+			fmt.Printf("\n\t\t-most\tMost popular robinhood stocks by ownership")
+			fmt.Printf("\n\t\t-pop\tLargest robinhood popularity changes\n")
+			fmt.Printf("\n\tpff\tPreferred stock data")
+			fmt.Printf("\n\t\t-down\tList tickers down over 1%%\n\t\t-up\tList tickers up over 1%%")
 			fmt.Println("\n")
 
 		case arg == "-a":
@@ -87,27 +89,36 @@ func Run(args []string) {
 				etc.News("wsj")
 				return
 			default:
-				fmt.Println("No valid news source selected.")
-				return
+				panic(fmt.Sprintf("No news source found for '%s'.", args[0]))
 			}
 		}
 
-		if args[0] == "-rh" {
+		if args[0] == "pff" {
 			switch args[1] {
-			case "most":
+			case "-down":
+				fin.Pff()
+				return
+			default:
+				panic(fmt.Sprintf("No command for '%s' under pff.", args[1]))
+			}
+		}
+
+		if args[0] == "rh" {
+			switch args[1] {
+			case "-most":
 				rh.RHpop()
 				return
-			case "pop":
+			case "-pop":
 				rh.RHchg()
 				return
-			case "inc":
+			case "-inc":
 				rh.RHinc()
 				return
-			case "dec":
+			case "-dec":
 				rh.RHdec()
 				return
 			default:
-				panic(fmt.Sprintf("No command for '%s' under -rh.\n", args[1]))
+				panic(fmt.Sprintf("No command for '%s' under rh.\n", args[1]))
 			}
 		}
 
@@ -145,7 +156,7 @@ func Run(args []string) {
 				}(v, &wg)
 			}
 		} else {
-			fmt.Println("No command specified.")
+			panic("No command specified.")
 		}
 
 		wg.Wait()
