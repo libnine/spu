@@ -1,6 +1,6 @@
 const mongo = require('mongodb').MongoClient
 
-let arr = []
+arr = []
 
 async function init() {
   let client = new mongo(process.env.PFF, {
@@ -11,16 +11,8 @@ async function init() {
   try {
     await client.connect()
     const db = client.db("pff")
-    const col = db.collection("symbols")
-    col.find({}).sort({"symbol": 1}).toArray((e, d) => {
-        if (e) throw e
-        arr = d
-    })
-    db.collection("historical").insertMany(arr)
-    return db.collection("current").drop((e, r) => {
-        if (e) throw e
-        return r
-    })
+    const col = db.collection("current")
+    return await col.find({}).toArray()
   } 
   
   catch (e) {
@@ -32,9 +24,38 @@ async function init() {
   } 
 }
 
+const hist = async () => {
+  let client = new mongo(process.env.PFF, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
 
+  try {
+    await client.connect()
+    const db = client.db("pff")
+    await db.collection("historical").insertMany(arr)
+    return db.collection("current").drop()
+  } 
+  
+  catch (e) {
+    console.error(e)
+  } 
+  
+  finally {
+    client.close()
+  }
+}
 
 init()
-    .then((ok) => {
-        console.log(ok)
+  .then((current) => {
+    current.forEach((d) => {
+      arr.push(d)
     })
+    hist()
+      .then((res) => {
+        console.log(res)
+      })
+  })
+  .catch((e) => {
+    console.log(e)
+  })

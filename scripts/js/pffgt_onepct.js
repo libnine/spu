@@ -1,1 +1,0 @@
-printjson(db.current.find({chg_pct: {$gt: 0.99}}, {ticker: 1, last: 1, chg_pct: 1, yield: 1}).sort({chg_pct: -1}).toArray())

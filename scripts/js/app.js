@@ -14,15 +14,15 @@ async function init() {
     const db = client.db("pff")
     const col = db.collection("symbols")
     return await col.find({}).sort({"symbol": 1}).toArray()
-  } 
-  
+  }
+
   catch (e) {
     console.error(e)
-  } 
-  
+  }
+
   finally {
     client.close()
-  } 
+  }
 }
 
 const ins = async(data) => {
@@ -35,7 +35,7 @@ const ins = async(data) => {
     await client.connect()
     let db = client.db("pff")
     let col = db.collection("current")
-    
+
     const insCount = await col.insertMany(data)
     return insCount.insertedCount
   }
@@ -43,7 +43,7 @@ const ins = async(data) => {
   catch (e) {
     console.log(e)
   }
-  
+
   finally {
     client.close()
   }
@@ -90,7 +90,7 @@ const scraped = async (ticker) => {
 }
 
 async function go(dump) {
-  try { 
+  try {
     return Promise.all(dump.map(a => scraped(a)))
   }
   catch (e) {
