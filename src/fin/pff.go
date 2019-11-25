@@ -15,6 +15,4 @@ func Pff() {
 	if err := cmd.Run(); err != nil {
 		log.Fatal(err)
 	}
-
-	fmt.Printf("%s", string(stdout.Bytes()))
 }
