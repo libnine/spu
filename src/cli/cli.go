@@ -44,7 +44,7 @@ func Run(args []string) {
 			fmt.Printf("\n\t\t-most\tMost popular robinhood stocks by ownership")
 			fmt.Printf("\n\t\t-pop\tLargest robinhood popularity changes\n")
 			fmt.Printf("\n\tpff\tPreferred stock data")
-			fmt.Printf("\n\t\t-down\tList tickers down over 1%%\n\t\t-up\tList tickers up over 1%%")
+			fmt.Printf("\n\t\t-down\tTickers down over 1%%\n\t\t-rel\tTickers with over 2x average volume\n\t\t-up\tTickers up over 1%%")
 			fmt.Println("\n")
 
 		case arg == "-a":
