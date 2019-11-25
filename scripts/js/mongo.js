@@ -1,4 +1,5 @@
 const mongo = require('mongodb').MongoClient
+const fs = require('fs')
 
 let arr = []
 
@@ -14,17 +15,15 @@ async function queries() {
     const col = db.collection("bu")
     
     const gt_one = await col.find({chg_pct: {$gt: 0.99}}, 
-      {ticker: 1, last: 1, chg_pct: 1, volume: 1, yield: 1}).sort({chg_pct: -1}).toArray()
+      {ticker: true, last: true, chg_pct: true, relative_volume: true, volume: true, yield: true}).sort({chg_pct: -1}).toArray()
     
     const lt_one = await col.find({chg_pct: {$lt: -0.99}}, 
-      {ticker: 1, last: 1, chg_pct: 1, volume: 1, yield: 1}).sort({chg_pct: 1}).toArray()
+      {ticker: true, last: true, chg_pct: true, relative_volume: true, volume: true, yield: true}).sort({chg_pct: 1}).toArray()
     
     const rel_vol = await col.find({relative_volume: {$gt: 2}}, 
-      {ticker: 1, last: 1, chg_pct: 1, volume: 1, yield: 1}).sort({relative_volume: -1}).limit(10).toArray()
+      {ticker: true, last: true, chg_pct: true, relative_volume: true, volume: true, yield: true}).sort({relative_volume: -1}).limit(10).toArray()
     
-    // const 
-
-    return [{"gt_one_pct": gt_one, "lt_one_pct": lt_one, "rel_vol": rel_vol}]
+    return [{"gt_one_percent": gt_one, "lt_one_percent": lt_one, "rel_vol": rel_vol}]
   }
 
   catch (e) {
@@ -38,5 +37,6 @@ async function queries() {
 
 queries().
   then((res) => {
-    console.log(res)
+    let n = Math.floor(Math.random() * 10000000000)
+    fs.writeFileSync(`./data/dumps/${n}_mongo.json`, JSON.stringify(res, null, 2))
   })
