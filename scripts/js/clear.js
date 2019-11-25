@@ -31,6 +31,10 @@ const hist = async () => {
   })
 
   try {
+    if (arr.length == 0) { 
+      return 
+    }
+
     await client.connect()
     const db = client.db("pff")
     await db.collection("historical").insertMany(arr)

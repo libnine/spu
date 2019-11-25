@@ -13,7 +13,7 @@ async function queries() {
   try {
     await client.connect()
     const db = client.db("pff")
-    const col = db.collection("bu")
+    const col = db.collection("current")
     
     const gt_one = await col.find({chg_pct: {$gt: 0.99}}).sort({chg_pct: -1}).toArray()
     const lt_one = await col.find({chg_pct: {$lt: -0.99}}).sort({chg_pct: 1}).toArray()
