@@ -12,6 +12,7 @@ import (
 
 type DS struct {
 	GTO  []dump `json:"gt_one_percent"`
+	HY   []dump `json:"high_yield"`
 	LTO  []dump `json:"lt_one_percent"`
 	RVol []dump `json:"rel_vol"`
 }
@@ -29,7 +30,7 @@ type dump struct {
 	Exdiv     string     `json:"ex_div,omitempty"`
 	Last      float64    `json:"last"`
 	Name      string     `json:"name"`
-	QuoteTime string     `json:"quoteTime"`
+	QuoteTime string     `json:"quoteTime,omitempty"`
 	RelVol    float64    `json:"relative_volume"`
 	Ticker    string     `json:"ticker"`
 	Volume    float64    `json:"volume"`
