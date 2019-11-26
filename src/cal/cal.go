@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func Calendar() {
+func Calendar(dn int) {
 	var temp []string
 	var weekset [][]string
 	offset := 0
@@ -62,12 +62,7 @@ func Calendar() {
 		}
 	}
 
-	dn := int(time.Now().Weekday())
 	yr, mo, day := time.Now().Date()
-
-	if dn == 6 || dn == 7 {
-		dn = 1
-	}
 
 	fmt.Printf("\n%s %s %v, %v\n", time.Now().Weekday(), mo, day, yr)
 	for n := range weekset[dn-1] {

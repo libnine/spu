@@ -36,5 +36,5 @@ queries().
     fs.emptyDirSync("./data/dumps/")
 
     let n = Math.floor(Math.random() * 100000000000)
-    fs.writeFileSync(`./data/dumps/${n}_mongo.json`, JSON.stringify(res, null, 2))
+    fs.writeFileSync(`./data/dumps/dump.json`, JSON.stringify(res, null, 2))
   })

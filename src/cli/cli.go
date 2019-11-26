@@ -2,8 +2,10 @@ package cli
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"regexp"
+	"strconv"
 	"strings"
 	"sync"
 
@@ -50,9 +52,6 @@ func Run(args []string) {
 		case arg == "-a":
 			quandl.Qaaii()
 
-		case arg == "-c":
-			cal.Calendar()
-
 		case arg == "-g":
 			chG := make(chan []string)
 			go tr.Greed(&chG)
@@ -74,6 +73,24 @@ func Run(args []string) {
 		}
 
 	case v > 1:
+		if args[0] == "cal" {
+			n, err := strconv.Atoi(args[1])
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			if n == 6 || n == 7 {
+				panic("No weekend data.")
+			}
+
+			if n == 0 || n >= 7 {
+				panic(fmt.Sprintf("Invalid day number '%v' (Monday = 1, Sunday = 7)", args[1]))
+			}
+
+			cal.Calendar(n)
+			return
+		}
+
 		if args[0] == "news" {
 			switch args[1] {
 			case "-bbg":
