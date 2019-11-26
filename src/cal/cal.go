@@ -62,9 +62,10 @@ func Calendar(dn int) {
 		}
 	}
 
-	yr, mo, day := time.Now().Date()
+	tdy := int(time.Now().Weekday())
+	yr, mo, day := time.Now().Add(time.Hour * time.Duration(24*(dn))).Add(time.Hour * (time.Duration(-24 * tdy))).Date()
 
-	fmt.Printf("\n%s %s %v, %v\n", time.Now().Weekday(), mo, day, yr)
+	fmt.Printf("\n%s %s %v, %v\n", time.Now().Add(time.Hour*time.Duration(24*(dn))).Add(time.Hour*(time.Duration(-24*tdy))).Weekday(), mo, day, yr)
 	for n := range weekset[dn-1] {
 		fmt.Printf("\n%s", weekset[dn-1][n])
 	}
