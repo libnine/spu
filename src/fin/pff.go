@@ -80,4 +80,11 @@ func Pff() {
 		t := strings.ToUpper(data[0].RVol[n].Ticker)
 		fmt.Printf("%s\t\t%0.2f%%\t%0.2f\t%0.2f\n", t, data[0].RVol[n].ChgPct, data[0].RVol[n].Volume, data[0].RVol[n].RelVol)
 	}
+
+	fmt.Printf("\nHigh Yield")
+	fmt.Printf("\nTicker\tChange\tYield\tVolume (1k)\tRelative Volume\n")
+	for n := range data[0].HY {
+		t := strings.ToUpper(data[0].HY[n].Ticker)
+		fmt.Printf("%s\t\t%0.2f%%\t%0.2f%%\t%0.2f\t%0.2f\n", t, data[0].HY[n].ChgPct, data[0].HY[n].Yield, data[0].HY[n].Volume, data[0].HY[n].RelVol)
+	}
 }
