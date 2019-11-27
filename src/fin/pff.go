@@ -61,21 +61,21 @@ func Pff() {
 
 	fmt.Printf("\n%s %s %v, %v\n\n", time.Now().Weekday(), mo, day, yr)
 	fmt.Printf("\nDown > 1%%")
-	fmt.Printf("\nTicker\t\tChange\tVolume (1000)\tRelative Volume\n")
+	fmt.Printf("\nTicker - Change - Volume (1k) - Relative Volume\n")
 	for n := range data[0].LTO {
 		t := strings.ToUpper(data[0].LTO[n].Ticker)
-		fmt.Printf("%s\t\t%0.2f%%\t%0.2f\t%0.2f\n", t, data[0].LTO[n].ChgPct, data[0].LTO[n].Volume, data[0].LTO[n].RelVol)
+		fmt.Printf("%s\t%0.2f%%\t%0.2f\t%0.2f\n", t, data[0].LTO[n].ChgPct, data[0].LTO[n].Volume, data[0].LTO[n].RelVol)
 	}
 
 	fmt.Printf("\nUp > 1%%")
-	fmt.Printf("\nTicker\t\tChange\tVolume (1000)\tRelative Volume\n")
+	fmt.Printf("\nTicker\tChange\tVolume (1k)\tRelative Volume\n")
 	for n := range data[0].GTO {
 		t := strings.ToUpper(data[0].GTO[n].Ticker)
 		fmt.Printf("%s\t\t%0.2f%%\t%0.2f\t%0.2f\n", t, data[0].GTO[n].ChgPct, data[0].GTO[n].Volume, data[0].GTO[n].RelVol)
 	}
 
 	fmt.Printf("\nOver 2x Average Volume")
-	fmt.Printf("\nTicker\t\tChange\tVolume (1000)\tRelative Volume\n")
+	fmt.Printf("\nTicker\tChange\tVolume (1k)\tRelative Volume\n")
 	for n := range data[0].RVol {
 		t := strings.ToUpper(data[0].RVol[n].Ticker)
 		fmt.Printf("%s\t\t%0.2f%%\t%0.2f\t%0.2f\n", t, data[0].RVol[n].ChgPct, data[0].RVol[n].Volume, data[0].RVol[n].RelVol)
