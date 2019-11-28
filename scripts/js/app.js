@@ -2,8 +2,9 @@ const axios = require('axios')
 const mongo = require('mongodb').MongoClient
 
 let arr = []
+let arr_cef = []
 
-async function init() {
+async function init(d) {
   let client = new mongo(process.env.PFF, {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -11,7 +12,7 @@ async function init() {
 
   try {
     await client.connect()
-    const db = client.db("pff")
+    const db = client.db(d)
     const col = db.collection("symbols")
     return await col.find({}).sort({"symbol": 1}).toArray()
   }
@@ -25,7 +26,9 @@ async function init() {
   }
 }
 
-const ins = async(data) => {
+// 
+
+const ins = async(d, data) => {
   let client = new mongo(process.env.PFF, {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -33,7 +36,9 @@ const ins = async(data) => {
 
   try {
     await client.connect()
-    let db = client.db("pff")
+    console.log(`${d} insert starting.`)
+
+    let db = client.db(d)
     let col = db.collection("current")
 
     const insCount = await col.insertMany(data)
@@ -49,9 +54,9 @@ const ins = async(data) => {
   }
 }
 
-const scraped = async (ticker) => {
+const scraped = async (ticker, type) => {
   try {
-    let res = await axios.get(`https://www.marketwatch.com/investing/stock/${ticker}`)
+    let res = await axios.get(`https://www.marketwatch.com/investing/${type}/${ticker}`)
 
     dump = JSON.parse(/\s+\<script\stype\=\"application\/[a-zA-Z+]+\"\>\s+?({[\s\S]*})\s+?\<\/script\>/g.exec(res.data)[1])
     re_52wk_low = /52\s\w+\s\w+\<\/[\w]+\>[\s\<\w\=\"\w+]+\>(.+?)\s\-\s[\d\.]+\<\//g
@@ -86,31 +91,52 @@ const scraped = async (ticker) => {
       "yield": parseFloat(re_yield.exec(res.data)[1])
     })
   }
-  catch (e) {}
+  catch (e) {console.log(e)}
 }
 
-async function go(dump) {
+async function go(dump, type) {
   try {
-    return Promise.all(dump.map(a => scraped(a)))
+    return Promise.all(dump.map(a => scraped(a, type)))
   }
   catch (e) {
     return e
   }
 }
 
-init()
+init("cef")
+  .then((t) => {
+    t.forEach((d) => {
+      arr_cef.push(d.symbol.toLowerCase())
+    })
+    go(arr_cef, "fund")
+      .then((data) => {
+        let filtered = data.filter((el) => {
+          return el != null
+        })
+        console.log(`${filtered.length} symbols found. Inserting.`)
+        ins("cef", filtered)
+          .then((res) => {
+            console.log(res)
+          })
+      })
+      .catch((e) => console.log(e))
+  })
+  .catch((e) => {
+    console.log(e)
+  })
+
+init("pff")
   .then((t) => {
     t.forEach((d) => {
       arr.push(d.symbol.toLowerCase().replace(".p", ".pr"))
     })
-    go(arr)
+    go(arr, "stock")
       .then((d) => {
         let filtered = d.filter((el) => {
           return el != null
         })
-
         console.log(`${filtered.length} symbols found. Inserting.`)
-        ins(filtered)
+        ins("pff", filtered)
           .then((res) => {
             console.log(res)
           })
