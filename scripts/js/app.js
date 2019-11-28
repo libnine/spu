@@ -91,7 +91,7 @@ const scraped = async (ticker, type) => {
       "yield": parseFloat(re_yield.exec(res.data)[1])
     })
   }
-  catch (e) {console.log(e)}
+  catch (e) {}
 }
 
 async function go(dump, type) {
@@ -103,27 +103,27 @@ async function go(dump, type) {
   }
 }
 
-init("cef")
-  .then((t) => {
-    t.forEach((d) => {
-      arr_cef.push(d.symbol.toLowerCase())
-    })
-    go(arr_cef, "fund")
-      .then((data) => {
-        let filtered = data.filter((el) => {
-          return el != null
-        })
-        console.log(`${filtered.length} symbols found. Inserting.`)
-        ins("cef", filtered)
-          .then((res) => {
-            console.log(res)
-          })
-      })
-      .catch((e) => console.log(e))
-  })
-  .catch((e) => {
-    console.log(e)
-  })
+// init("cef")
+//   .then((t) => {
+//     t.forEach((d) => {
+//       arr_cef.push(d.symbol.toLowerCase())
+//     })
+//     go(arr_cef, "fund")
+//       .then((data) => {
+//         let filtered = data.filter((el) => {
+//           return el != null
+//         })
+//         console.log(`${filtered.length} symbols found. Inserting.`)
+//         ins("cef", filtered)
+//           .then((res) => {
+//             console.log(res)
+//           })
+//       })
+//       .catch((e) => console.log(e))
+//   })
+//   .catch((e) => {
+//     console.log(e)
+//   })
 
 init("pff")
   .then((t) => {
