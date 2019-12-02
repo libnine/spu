@@ -61,30 +61,58 @@ func Pff() {
 
 	fmt.Printf("\n%s %s %v, %v\n\n", time.Now().Weekday(), mo, day, yr)
 	fmt.Printf("\nDown > 1%%")
-	fmt.Printf("\nTicker - Change - Volume (1k) - Relative Volume\n")
+	fmt.Printf("\nTicker\t\tChange\tYield\tVolume (1k)\tRelative Volume\n")
 	for n := range data[0].LTO {
 		t := strings.ToUpper(data[0].LTO[n].Ticker)
-		fmt.Printf("%s\t%0.2f%%\t%0.2f\t%0.2f\n", t, data[0].LTO[n].ChgPct, data[0].LTO[n].Volume, data[0].LTO[n].RelVol)
+
+		if len(data[0].LTO[n].Ticker) >= 8 {
+			t = fmt.Sprintf("%s\t", strings.ToUpper(data[0].LTO[n].Ticker))
+		} else {
+			t = fmt.Sprintf("%s\t\t", strings.ToUpper(data[0].LTO[n].Ticker))
+		}
+
+		fmt.Printf("%s%0.2f%%\t%0.2f\t%0.2f\t\t%0.2f\n", t, data[0].LTO[n].ChgPct, data[0].LTO[n].Yield, data[0].LTO[n].Volume, data[0].LTO[n].RelVol)
 	}
 
 	fmt.Printf("\nUp > 1%%")
-	fmt.Printf("\nTicker\tChange\tVolume (1k)\tRelative Volume\n")
+	fmt.Printf("\nTicker\t\tChange\tYield\tVolume (1k)\tRelative Volume\n")
 	for n := range data[0].GTO {
 		t := strings.ToUpper(data[0].GTO[n].Ticker)
-		fmt.Printf("%s\t\t%0.2f%%\t%0.2f\t%0.2f\n", t, data[0].GTO[n].ChgPct, data[0].GTO[n].Volume, data[0].GTO[n].RelVol)
+
+		if len(data[0].GTO[n].Ticker) >= 8 {
+			t = fmt.Sprintf("%s\t", strings.ToUpper(data[0].GTO[n].Ticker))
+		} else {
+			t = fmt.Sprintf("%s\t\t", strings.ToUpper(data[0].GTO[n].Ticker))
+		}
+
+		fmt.Printf("%s%0.2f%%\t%0.2f\t%0.2f\t\t%0.2f\n", t, data[0].GTO[n].ChgPct, data[0].GTO[n].Yield, data[0].GTO[n].Volume, data[0].GTO[n].RelVol)
 	}
 
 	fmt.Printf("\nOver 2x Average Volume")
-	fmt.Printf("\nTicker\tChange\tVolume (1k)\tRelative Volume\n")
+	fmt.Printf("\nTicker\t\tChange\tYield\tVolume (1k)\tRelative Volume\n")
 	for n := range data[0].RVol {
 		t := strings.ToUpper(data[0].RVol[n].Ticker)
-		fmt.Printf("%s\t\t%0.2f%%\t%0.2f\t%0.2f\n", t, data[0].RVol[n].ChgPct, data[0].RVol[n].Volume, data[0].RVol[n].RelVol)
+
+		if len(data[0].RVol[n].Ticker) >= 8 {
+			t = fmt.Sprintf("%s\t", strings.ToUpper(data[0].RVol[n].Ticker))
+		} else {
+			t = fmt.Sprintf("%s\t\t", strings.ToUpper(data[0].RVol[n].Ticker))
+		}
+
+		fmt.Printf("%s%0.2f%%\t%0.2f\t%0.2f\t\t%0.2f\n", t, data[0].RVol[n].ChgPct, data[0].RVol[n].Yield, data[0].RVol[n].Volume, data[0].RVol[n].RelVol)
 	}
 
 	fmt.Printf("\nHigh Yield")
-	fmt.Printf("\nTicker\tChange\tYield\tVolume (1k)\tRelative Volume\n")
+	fmt.Printf("\nTicker\t\tChange\tYield\tVolume (1k)\tRelative Volume\n")
 	for n := range data[0].HY {
 		t := strings.ToUpper(data[0].HY[n].Ticker)
-		fmt.Printf("%s\t\t%0.2f%%\t%0.2f%%\t%0.2f\t%0.2f\n", t, data[0].HY[n].ChgPct, data[0].HY[n].Yield, data[0].HY[n].Volume, data[0].HY[n].RelVol)
+
+		if len(data[0].HY[n].Ticker) >= 8 {
+			t = fmt.Sprintf("%s\t", strings.ToUpper(data[0].HY[n].Ticker))
+		} else {
+			t = fmt.Sprintf("%s\t\t", strings.ToUpper(data[0].HY[n].Ticker))
+		}
+
+		fmt.Printf("%s%0.2f%%\t%0.2f%%\t%0.2f\t\t%0.2f\n", t, data[0].HY[n].ChgPct, data[0].HY[n].Yield, data[0].HY[n].Volume, data[0].HY[n].RelVol)
 	}
 }
