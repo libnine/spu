@@ -61,8 +61,6 @@ const scraped = async (ticker, type) => {
     dump = JSON.parse(/\s+\<script\stype\=\"application\/[a-zA-Z+]+\"\>\s+?({[\s\S]*})\s+?\<\/script\>/g.exec(res.data)[1])
     re_52wk_low = /52\s\w+\s\w+\<\/[\w]+\>[\s\<\w\=\"\w+]+\>(.+?)\s\-\s[\d\.]+\<\//g
     re_52wk_high = /52\s\w+\s\w+\<\/[\w]+\>[\s\<\w\=\"\w+]+\>[\d\.]+\s\-\s(.+?)\<\//g
-    re_chg = /change\-\-point\-\-q\"\>(.+?)\</g
-    re_chg_pct = /change\-\-percent\-\-q\"\>(.+?)\</g
     re_day_high = /Day\sRange\<\/[a-z]+\>\s+\<span\s[a-z]+\=\"[a-z\s\_]+\"\>[0-9\.]+\s\-\s(.+?)\</g
     re_day_low = /Day\sRange\<\/[a-z]+\>\s+\<span\s[a-z]+\=\"[a-z\s\_]+\"\>(.+?)\s\-\s[0-9\.]+\</g
     re_div = /Dividend\<\/[a-z]+\>\s+\<span\s[a-z]+\=\"[a-z\s\_]+\"\>\$(.+?)\</g
@@ -78,17 +76,10 @@ const scraped = async (ticker, type) => {
       "chg": parseFloat(dump.priceChange),
       "chg_pct": parseFloat(dump.priceChangePercent.replace("%", "")),
       "date": new Date(Date.now()).toISOString(),
-      "day_high": parseFloat(re_day_high.exec(res.data)[1]),
-      "day_low": parseFloat(re_day_low.exec(res.data)[1]),
-      "div": parseFloat(re_div.exec(res.data)[1]),
-      "ex_div": re_exdiv.exec(res.data)[1],
       "last": parseFloat(dump.price),
       "name": dump.name,
       "quoteTime": dump.quoteTime,
-      "relative_volume": (parseFloat(re_vol_rel.exec(res.data)[1]) / 100),
-      "ticker": ticker,
-      "volume": parseFloat(re_vol.exec(res.data)[1]),
-      "yield": parseFloat(re_yield.exec(res.data)[1])
+      "ticker": ticker
     })
   }
   catch (e) {}
@@ -103,40 +94,18 @@ async function go(dump, type) {
   }
 }
 
-// init("cef")
-//   .then((t) => {
-//     t.forEach((d) => {
-//       arr_cef.push(d.symbol.toLowerCase())
-//     })
-//     go(arr_cef, "fund")
-//       .then((data) => {
-//         let filtered = data.filter((el) => {
-//           return el != null
-//         })
-//         console.log(`${filtered.length} symbols found. Inserting.`)
-//         ins("cef", filtered)
-//           .then((res) => {
-//             console.log(res)
-//           })
-//       })
-//       .catch((e) => console.log(e))
-//   })
-//   .catch((e) => {
-//     console.log(e)
-//   })
-
-init("pff")
+init("cef")
   .then((t) => {
     t.forEach((d) => {
-      arr.push(d.symbol.toLowerCase().replace(".p", ".pr"))
+      arr_cef.push(d.symbol.toLowerCase())
     })
-    go(arr, "stock")
+    go(arr_cef, "fund")
       .then((data) => {
         let filtered = data.filter((el) => {
           return el != null
         })
         console.log(`${filtered.length} symbols found. Inserting.`)
-        ins("pff", filtered)
+        ins("cef", filtered)
           .then((res) => {
             console.log(res)
           })
