@@ -92,6 +92,16 @@ func Run(args []string) {
 			return
 		}
 
+		if args[0] == "cef" {
+			switch args[1] {
+			case "-down":
+				fin.Cef()
+				return
+			default:
+				panic(fmt.Sprintf("No command for '%s' under cef.", args[1]))
+			}
+		}
+
 		if args[0] == "news" {
 			switch args[1] {
 			case "-bbg":

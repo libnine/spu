@@ -47,7 +47,7 @@ func Pff() {
 	// 	log.Fatal(err)
 	// }
 
-	f, err := os.Open("./data/dumps/dump.json")
+	f, err := os.Open("./data/dumps/pff.json")
 	if err != nil {
 		log.Fatal(err)
 	}

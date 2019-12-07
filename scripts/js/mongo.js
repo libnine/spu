@@ -31,8 +31,38 @@ async function queries() {
   }
 }
 
+async function cef_queries() {
+  let client = new mongo(process.env.PFF, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
+
+  try {
+    await client.connect()
+    const db = client.db("cef")
+    const col = db.collection("current")
+    
+    const gt_one = await col.find({chg_pct: {$gt: 0.99}}).sort({chg_pct: -1}).toArray()
+    const lt_one = await col.find({chg_pct: {$lt: -0.99}}).sort({chg_pct: 1}).toArray()
+
+    return [{"gt_one_percent": gt_one, "lt_one_percent": lt_one}]
+  }
+
+  catch (e) {
+    console.error(e)
+  }
+
+  finally {
+    client.close()
+  }
+}
+
 queries().
   then((res) => {
     fs.emptyDirSync("./data/dumps/")
-    fs.writeFileSync(`./data/dumps/dump.json`, JSON.stringify(res, null, 2))
+    fs.writeFileSync(`./data/dumps/pff.json`, JSON.stringify(res, null, 2))
+    cef_queries().
+      then((res) => {
+        fs.writeFileSync(`./data/dumps/cef.json`, JSON.stringify(res, null, 2))
+      })
   })

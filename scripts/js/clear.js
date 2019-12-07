@@ -2,19 +2,19 @@ const mongo = require('mongodb').MongoClient
 
 arr = []
 
-async function init() {
+async function init(mdb) {
   let client = new mongo(process.env.PFF, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
 
   try {
+    arr.splice(0, arr.length)
     await client.connect()
-    const db = client.db("pff")
+    const db = client.db(mdb)
     const col = db.collection("current")
     return await col.find({}).toArray()
   } 
-  
   catch (e) {
     console.error(e)
   } 
@@ -24,7 +24,7 @@ async function init() {
   } 
 }
 
-const hist = async () => {
+const hist = async (mdb) => {
   let client = new mongo(process.env.PFF, {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -36,7 +36,7 @@ const hist = async () => {
     }
 
     await client.connect()
-    const db = client.db("pff")
+    const db = client.db(mdb)
     await db.collection("historical").insertMany(arr)
     return db.collection("current").drop()
   } 
@@ -50,16 +50,23 @@ const hist = async () => {
   }
 }
 
-init()
+init("pff")
   .then((current) => {
     current.forEach((d) => {
       arr.push(d)
+  })
+  hist("pff")
+    .then((res) => {
+      console.log(res)
+  })
+init("cef")
+  .then((current) => {
+    current.forEach((d) => {
+      arr.push(d)
+  })
+  hist("cef")
+    .then((res) => {
+      console.log(res)
     })
-    hist()
-      .then((res) => {
-        console.log(res)
-      })
   })
-  .catch((e) => {
-    console.log(e)
-  })
+})
