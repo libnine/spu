@@ -1,11 +1,13 @@
 package fin
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
+	"os/exec"
 	"strings"
 	"time"
 )
@@ -28,7 +30,17 @@ type fund struct {
 	Ticker    string     `json:"ticker"`
 }
 
-func Cef() {
+func CefCompile() {
+	var stdout, stderr bytes.Buffer
+
+	cmd := exec.Command("/usr/bin/sh", "./scripts/sh/cef.sh")
+	cmd.Stdout, cmd.Stderr = &stdout, &stderr
+	if err := cmd.Run(); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func Cef(arg string) {
 	var data []dataset
 
 	f, err := os.Open("./data/dumps/cef.json")
@@ -42,32 +54,36 @@ func Cef() {
 
 	yr, mo, day := time.Now().Date()
 
-	fmt.Printf("\n%s %s %v, %v\n\n", time.Now().Weekday(), mo, day, yr)
-	fmt.Printf("\nDown > 1%%")
-	fmt.Printf("\nTicker\t\tLast\tChange\n")
-	for n := range data[0].LTO {
-		t := strings.ToUpper(data[0].LTO[n].Ticker)
+	fmt.Printf("\n%s %s %v, %v\n", time.Now().Weekday(), mo, day, yr)
 
-		if len(data[0].LTO[n].Ticker) >= 8 {
-			t = fmt.Sprintf("%s\t", strings.ToUpper(data[0].LTO[n].Ticker))
-		} else {
-			t = fmt.Sprintf("%s\t\t", strings.ToUpper(data[0].LTO[n].Ticker))
+	switch arg {
+	case "down":
+		fmt.Printf("\nDown > 1%%")
+		fmt.Printf("\nTicker\t\tLast\tChange\n")
+		for n := range data[0].LTO {
+			t := strings.ToUpper(data[0].LTO[n].Ticker)
+
+			if len(data[0].LTO[n].Ticker) >= 8 {
+				t = fmt.Sprintf("%s\t", strings.ToUpper(data[0].LTO[n].Ticker))
+			} else {
+				t = fmt.Sprintf("%s\t\t", strings.ToUpper(data[0].LTO[n].Ticker))
+			}
+
+			fmt.Printf("%s%0.2f\t%0.2f\n", t, data[0].LTO[n].Last, data[0].LTO[n].ChgPct)
 		}
+	case "up":
+		fmt.Printf("\nUp > 1%%")
+		fmt.Printf("\nTicker\t\tLast\tChange\n")
+		for n := range data[0].GTO {
+			t := strings.ToUpper(data[0].GTO[n].Ticker)
 
-		fmt.Printf("%s%0.2f\t%0.2f\n", t, data[0].LTO[n].Last, data[0].LTO[n].ChgPct)
-	}
+			if len(data[0].GTO[n].Ticker) >= 8 {
+				t = fmt.Sprintf("%s\t", strings.ToUpper(data[0].GTO[n].Ticker))
+			} else {
+				t = fmt.Sprintf("%s\t\t", strings.ToUpper(data[0].GTO[n].Ticker))
+			}
 
-	fmt.Printf("\nUp > 1%%")
-	fmt.Printf("\nTicker\t\tLast\tChange\n")
-	for n := range data[0].GTO {
-		t := strings.ToUpper(data[0].GTO[n].Ticker)
-
-		if len(data[0].GTO[n].Ticker) >= 8 {
-			t = fmt.Sprintf("%s\t", strings.ToUpper(data[0].GTO[n].Ticker))
-		} else {
-			t = fmt.Sprintf("%s\t\t", strings.ToUpper(data[0].GTO[n].Ticker))
+			fmt.Printf("%s%0.2f\t%0.2f\t\n", t, data[0].GTO[n].Last, data[0].GTO[n].ChgPct)
 		}
-
-		fmt.Printf("%s%0.2f\t%0.2f\t\n", t, data[0].GTO[n].Last, data[0].GTO[n].ChgPct)
 	}
 }

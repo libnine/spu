@@ -39,6 +39,8 @@ func Run(args []string) {
 			fmt.Printf("\n\nCommands:")
 			fmt.Printf("\n\tcal\tDaily economic calendar")
 			fmt.Printf("\n\t\tChoose weekday by number ('cal 1' returns Monday)\n")
+			fmt.Printf("\n\tcef\tClosed end funds")
+			fmt.Printf("\n\t\t-c\tCompile CEF data dump\n\t\t-d\tFunds down over 1%%\n\t\t-up\tFunds up over 1%%\n")
 			fmt.Printf("\n\tnews\tRecent headlines from news sources")
 			fmt.Printf("\n\t\t-bbg\tBloomberg\n\t\t-mw\tMarketWatch\n\t\t-rtrs\tReuters\n\t\t-wsj\tWall Street Journal\n")
 			fmt.Printf("\n\trh\tRobinhood data")
@@ -47,7 +49,7 @@ func Run(args []string) {
 			fmt.Printf("\n\t\t-most\tMost popular robinhood stocks by ownership")
 			fmt.Printf("\n\t\t-pop\tLargest robinhood popularity changes\n")
 			fmt.Printf("\n\tpff\tPreferred stock data")
-			fmt.Printf("\n\t\t-down\tTickers down over 1%%\n\t\t-rel\tTickers with over 2x average volume\n\t\t-up\tTickers up over 1%%")
+			fmt.Printf("\n\t\t-c\tCompile preferred data dump\n\t\t-d\tTickers down over 1%%\n\t\t-rel\tTickers with over 2x average volume\n\t\t-up\tTickers up over 1%%\n\t\t-y\tTickers with highest yield")
 			fmt.Println("\n")
 
 		case arg == "-a":
@@ -94,8 +96,14 @@ func Run(args []string) {
 
 		if args[0] == "cef" {
 			switch args[1] {
-			case "-down":
-				fin.Cef()
+			case "-c":
+				fin.CefCompile()
+				return
+			case "-d", "-down":
+				fin.Cef("down")
+				return
+			case "-u", "-up":
+				fin.Cef("up")
 				return
 			default:
 				panic(fmt.Sprintf("No command for '%s' under cef.", args[1]))
@@ -123,8 +131,20 @@ func Run(args []string) {
 
 		if args[0] == "pff" {
 			switch args[1] {
-			case "-down":
-				fin.Pff()
+			case "-c":
+				fin.PffCompile()
+				return
+			case "-d", "-down":
+				fin.Pff("down")
+				return
+			case "-rel":
+				fin.Pff("rel")
+				return
+			case "-u", "-up":
+				fin.Pff("up")
+				return
+			case "-y":
+				fin.Pff("yield")
 				return
 			default:
 				panic(fmt.Sprintf("No command for '%s' under pff.", args[1]))
