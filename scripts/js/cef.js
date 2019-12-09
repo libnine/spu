@@ -36,7 +36,6 @@ const ins = async(d, data) => {
 
   try {
     await client.connect()
-    console.log(`${d} insert starting.`)
 
     let db = client.db(d)
     let col = db.collection("current")
