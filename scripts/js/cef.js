@@ -1,7 +1,6 @@
 const axios = require('axios')
 const mongo = require('mongodb').MongoClient
 
-let arr = []
 let arr_cef = []
 
 async function init(d) {
@@ -25,8 +24,6 @@ async function init(d) {
     client.close()
   }
 }
-
-// 
 
 const ins = async(d, data) => {
   let client = new mongo(process.env.PFF, {

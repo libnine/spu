@@ -1,8 +1,6 @@
 const mongo = require('mongodb').MongoClient
 const fs = require('fs-extra')
 
-let arr = []
-
 async function queries() {
   let client = new mongo(process.env.PFF, {
     useNewUrlParser: true,
