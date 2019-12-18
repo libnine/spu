@@ -108,11 +108,9 @@ init()
         let filtered = d.filter((el) => {
           return el != null
         })
-
-        console.log(`${filtered.length} symbols found. Inserting.`)
         ins(filtered)
           .then((res) => {
-            console.log(res)
+            console.log(`${res} symbols inserted.`)
           })
       })
       .catch((e) => console.log(e))
