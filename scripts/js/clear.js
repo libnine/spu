@@ -1,7 +1,5 @@
 const mongo = require('mongodb').MongoClient
 
-
-
 async function init(cli, mdb) {
   try {
     let docs = []
