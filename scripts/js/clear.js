@@ -23,12 +23,18 @@ async function init(cli, mdb) {
   } 
   
   finally {
-    client.close()
+    cli.close()
   } 
 }
 
 const dbFunc = async(c, dbs) => {
-  return Promise.all(dbs.map(d => init(c, d)))
+  try {
+    return Promise.all(dbs.map(d => init(c, d)))
+  }
+
+  catch (e) {
+    console.log(e)
+  }
 }
 
 const client = new mongo(process.env.PFF, {
